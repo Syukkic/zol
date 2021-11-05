@@ -19,6 +19,9 @@ def download(url):
 
     for detail in phone_info:
         detail_dict = {}
+
+        if detail.xpath('./a/@href'):
+            detail_dict['id'] = list(filter(None, detail.xpath('./a/@href')))[0].split('/')[2].split('.')[0][5:].strip()
         if detail.xpath('./h3/a/text()'):
             detail_dict['name'] = list(filter(None, detail.xpath('./h3/a/text()')))[0].strip()
         if detail.xpath('./div[1]/span[2]/b[2]/text()'):
@@ -27,7 +30,6 @@ def download(url):
             detail_dict['score'] = list(filter(None, detail.xpath('./div[2]/span[2]/text()')))[0].strip()
         result_list.append(detail_dict)
 
-       
     result_list = list(filter(None, result_list))
 
     return result_list
@@ -44,6 +46,8 @@ if __name__ == "__main__":
     data = []
     res = thread_pool(download, args=urls)
     for i in res:
+    #     for j in i:
+    #         print(j)
         data.extend(i)
         
     df = pd.DataFrame(data)
