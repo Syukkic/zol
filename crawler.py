@@ -34,24 +34,17 @@ def download(url):
       
 def thread_pool(target, args):
     with ThreadPoolExecutor(50) as executor:
-        res = [executor.submit(target, i) for i in args]
+        res = executor.map(target, args)
         return res
         
-
-    # def save_file(self):
-        # df = pd.DataFrame(result_list)
-        # df.to_csv('result.csv', index=False)
-
 if __name__ == "__main__":
     
     urls = [f'https://detail.zol.com.cn/cell_phone_index/subcate57_0_list_1_0_9_2_0_{i}.html' for i in range(1, 101)]
-    # url = 'https://detail.zol.com.cn/cell_phone_index/subcate57_0_list_1_0_9_2_0_1.html'
 
-    data_list = []
-    res = thread_pool(download, urls)
-    for future in as_completed(res):
-        data = future.result()
-        data_list.extend(data)
+    data = []
+    res = thread_pool(download, args=urls)
+    for i in res:
+        data.extend(i)
         
-    df = pd.DataFrame(data_list)
+    df = pd.DataFrame(data)
     df.to_csv('result.csv', index=False, encoding='utf-8')
