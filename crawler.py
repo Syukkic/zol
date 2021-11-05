@@ -28,6 +28,7 @@ def download(url):
             detail_dict['price'] = list(filter(None, detail.xpath('./div[1]/span[2]/b[2]/text()')))[0].strip()
         if detail.xpath('./div[2]/span[2]/text()'):
             detail_dict['score'] = list(filter(None, detail.xpath('./div[2]/span[2]/text()')))[0].strip()
+            detail_dict['crawled _date'] = date.today() # update time
         result_list.append(detail_dict)
 
     result_list = list(filter(None, result_list))
@@ -41,7 +42,7 @@ def thread_pool(target, args):
         
 if __name__ == "__main__":
     
-    urls = [f'https://detail.zol.com.cn/cell_phone_index/subcate57_0_list_1_0_9_2_0_{i}.html' for i in range(1, 101)]
+    urls = [f'https://detail.zol.com.cn/cell_phone_index/subcate57_0_list_1_0_9_2_0_{i}.html' for i in range(1, 11)]
 
     data = []
     res = thread_pool(download, args=urls)
